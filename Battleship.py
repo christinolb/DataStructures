@@ -56,6 +56,23 @@ def collision(level,row,column,size,aArray,opt):
                 clear = False
             else:
                 row+=1
+    
+    if opt == 2:
+        #ensures ship will fit on plane
+        column1=column
+        row1=row
+        while column+(size-1) > 9 or row+(size-1) > 9:
+            column = randint(0,9)
+            row = randint(0,9)
+            if column > 9 or row > 9:
+                column = column1
+                row = row1
+        for i in range(size-1):
+            if aArray[level][row][column] == "S":
+                clear = False
+            else:
+                row+=1
+                column+=1
             
     return clear, level, row, column, opt
         
@@ -88,6 +105,23 @@ def aColumn(level,row,column,size,aArray):
         
     return aArray
 
+def aDiagnal(level,row,column,size,aArray):
+    #ensures ship will fit on plane
+    column1=column
+    row1=row
+    while column+(size-1) > 9 or row+(size-1) > 9:
+        column = randint(0,9)
+        row = randint(0,9)
+        if column > 9 or row > 9:
+            column = column1
+            row = row1
+    #creates ship
+    for i in range(size):
+        aArray[level][row][column]="S"
+        column+=1
+        row+=1
+    return aArray
+
 def createShip(level, row, column, size, pos, aArray):
     #VERTICAL
     if pos == 0:
@@ -96,6 +130,10 @@ def createShip(level, row, column, size, pos, aArray):
     #HORIZONTAL
     if pos == 1:
         aArray = aRow(level,row,column,size,aArray)
+    
+    #DIAGNAL  
+    if pos == 2:
+        aArray = aDiagnal(level, row, column, size, aArray)
     
     return aArray
             
@@ -115,7 +153,7 @@ def main():
             #random coodinates
             level, row, column = coord()
             #randomly chooses position of ship 
-            pos = randint(0,1)
+            pos = randint(0,2)
             #checks for collision
             clear, level, row, column, pos = collision(level, row, column, size, aArray, pos)
               
